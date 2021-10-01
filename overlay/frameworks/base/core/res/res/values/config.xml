@@ -108,6 +108,20 @@
 
     <!-- Boolean indicating whether the wifi chipset has background scan support -->
     <bool translatable="false" name="config_wifi_background_scan_support">true</bool>
+    
+        <!-- Whether WiFi display is supported by this device.
+         There are many prerequisites for this feature to work correctly.
+         Here are a few of them:
+         * The WiFi radio must support WiFi P2P.
+         * The WiFi radio must support concurrent connections to the WiFi display and
+           to an access point.
+         * The Audio Flinger audio_policy.conf file must specify a rule for the "r_submix"
+           remote submix module.  This module is used to record and stream system
+           audio output to the WiFi display encoder in the media server.
+         * The remote submix module "audio.r_submix.default" must be installed on the device.
+         * The device must be provisioned with HDCP keys (for protected content).
+    -->
+    <bool name="config_enableWifiDisplay">true</bool>
 
     <!-- Set to true if the wifi display supports compositing content stored
          in gralloc protected buffers.  For this to be true, there must exist
@@ -141,9 +155,9 @@
     <dimen name="config_viewConfigurationTouchSlop">4dp</dimen>
 
     <!--  Maximum number of supported users -->
-    <integer name="config_multiuserMaximumUsers">2</integer>
+<!--    <integer name="config_multiuserMaximumUsers">1</integer>-->
     <!--  Whether Multiuser UI should be shown -->
-    <bool name="config_enableMultiUserUI">true</bool>
+    <bool name="config_enableMultiUserUI">false</bool>
 
     <integer name="config_bluetooth_operating_voltage_mv">3300</integer>
 
@@ -176,7 +190,7 @@
          some range of adjustment to dim the screen further than usual in very
          dark rooms. The contents of the screen must still be clearly visible
          in darkness (although they may not be visible in a bright room). -->
-    <integer name="config_screenBrightnessDark">10</integer>
+    <integer name="config_screenBrightnessDark">5</integer>
 
     <!-- Flag indicating whether we should enable the automatic brightness in Settings.
                   config_hardware_automatic_brightness_available is not set, so we will use software implementation -->
@@ -199,14 +213,18 @@
          backlight values for LUX levels between these control points.
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>15</item>
-        <item>30</item>
+        <item>5</item>
+        <item>25</item>
+        <item>50</item>
         <item>100</item>
         <item>200</item>
-        <item>400</item>
+        <item>300</item>
+        <item>500</item>
+        <item>750</item>
         <item>1000</item>
+        <item>1500</item>
         <item>2000</item>
-        <item>3000</item>
+        <item>10000</item>
     </integer-array>
 
     <!-- Array of output values for LCD backlight corresponding to the LUX values
@@ -214,18 +232,40 @@
          than the size of the config_autoBrightnessLevels array.
          The brightness values must be between 0 and 255 and be non-decreasing.
          This must be overridden in platform specific overlays -->
-    <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>15</item>   <!-- 0-10 -->
-        <item>46</item>   <!-- 10-30 -->
-        <item>126</item>   <!-- 30-100 -->
-        <item>148</item>   <!-- 100-200 -->
-        <item>148</item>   <!-- 200-400 -->
-        <item>168</item>   <!-- 400-1000 -->
-        <item>200</item>  <!-- 1000-2000 -->
-        <item>226</item>  <!-- 2000-3000 -->
-        <item>255</item>  <!-- 3000+ -->
-    </integer-array>
+	    <integer-array name="config_screenBrightnessBacklight">
+		<item>7</item>
+		<item>15</item>
+		<item>30</item>
+		<item>45</item>
+		<item>60</item>
+		<item>75</item>
+		<item>90</item>
+		<item>105</item>
+		<item>120</item>
+		<item>135</item>
+		<item>150</item>
+		<item>165</item>
+		<item>180</item>
+		<item>195</item>
+		<item>210</item>
+		<item>225</item>
+		<item>240</item>
+		<item>255</item>
+	    </integer-array>
+    
+        <!-- Screen brightness used to dim the screen when the user activity
+         timeout expires.  May be less than the minimum allowed brightness setting
+         that can be set by the user. -->
+    <integer name="config_screenBrightnessDim">1</integer>
 
+    <!-- Default screen brightness setting.
+         Must be in the range specified by minimum and maximum. -->
+    <integer name="config_screenBrightnessSettingDefault">20</integer>
+
+    <!-- Minimum screen brightness setting allowed by the power manager.
+         The user is forbidden from setting the brightness below this level. -->
+    <integer name="config_screenBrightnessSettingMinimum">3</integer>
+    
     <bool name="config_hotswapCapable">false</bool>
 
     <!-- Control the behavior when the user long presses the home button.
@@ -267,7 +307,7 @@
     <!-- Screen brightness used to dim the screen while dozing in a very low power state.
           May be less than the minimum allowed brightness setting
           that can be set by the user. -->
-    <integer name="config_screenBrightnessDoze">7</integer>
+    <integer name="config_screenBrightnessDoze">5</integer>
 
     <!-- ComponentName of a dream to show whenever the system would otherwise have
          gone to sleep.  When the PowerManager is asked to go to sleep, it will instead
@@ -325,5 +365,34 @@
     </string-array>
 
     <bool name="config_supportDoubleTapWake">true</bool>
+    
+        <!-- Number of physical SIM slots on the device. This includes both eSIM and pSIM slots, and
+         is not necessarily the same as the number of phones/logical modems supported by the device.
+         For example, a multi-sim device can have 2 phones/logical modems, but 3 physical slots,
+         or a single SIM device can have 1 phones/logical modems, but 2 physical slots (one eSIM
+         and one pSIM) -->
+    <integer name="config_num_physical_slots">2</integer>
+    
+            <!-- Whether device ignores the RSSNR signal implementation -->
+    <bool name="config_ignoreRssnrSignalLevel">true</bool>
+    
+    <!-- The default tiles to display in QuickSettings -->
+    <string name="quick_settings_tiles_default" translatable="false">
+       wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,location,hotspot,saver,dark,work,cast,night
+    </string>
+
+
+	<!-- If true, the display will be shifted around in ambient mode. -->
+	    <bool name="config_enableBurnInProtection">true</bool>    
+        
+	<!-- Should the pinner service pin the Home application? -->
+	<!--    <bool name="config_pinnerHomeApp">true</bool>-->
+	    
+        <!-- Configures whether the primary external storage device is
+         removable.  For example, if external storage is on an SD card,
+         it is removable; if it is built in to the device, it is not removable.
+         The default product has external storage on an SD card, which is
+         removable. -->
+    <bool name="config_externalStorageRemovable" product="default">false</bool>
     
 </resources>

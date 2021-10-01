@@ -14,9 +14,25 @@
 # limitations under the License.
 #
 
+$(call inherit-product, vendor/opengapps/build/opengapps-packages.mk)
+
+GAPPS_VARIANT := micro
+GAPPS_FORCE_PACKAGE_OVERRIDES := true
+# GAPPS_FORCE_MMS_OVERRIDES := true
+##GAPPS_FORCE_PIXEL_LAUNCHER := false
+GAPPS_EXCLUDED_PACKAGES += Hangouts \
+			PixelLauncher
+# GAPPS_FORCE_DIALER_OVERRIDES := true
+GAPPS_FORCE_BROWSER_OVERRIDES := true
+GAPPS_PRODUCT_PACKAGES += \
+   	LatinImeGoogle \
+	Drive \
+	GoogleHindiIME 
+#	
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280
 TARGET_SCREEN_WIDTH := 720
+TARGET_BOOTANIMATION_HALF_RES := true
 
 # AAPT CONFIG
 PRODUCT_AAPT_CONFIG := normal
@@ -214,7 +230,8 @@ PRODUCT_PACKAGES += \
     init.qcom.ssr.rc \
     init.qcom.usb.rc \
     init.recovery.qcom.rc \
-    ueventd.qcom.rc
+    ueventd.qcom.rc \
+    init.qcom.post_boot.sh 
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -380,8 +397,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-flags=--no-watch-dog \
     dalvik.vm.dex2oat-swap=false \
     dalvik.vm.dex2oat-threads=2 \
-    ro.vendor.qti.am.reschedule_service=true \
-    sys.use_fifo_ui=1
+    ro.vendor.qti.am.reschedule_service=true 
 
 # TextClassifier
 PRODUCT_PACKAGES += \
@@ -392,7 +408,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.qmi.adb_logmask=0 \
     persist.data.target=dpm1 \
     persist.radio.apm_sim_not_pwdn=1 \
-    ro.telephony.call_ring.multiple=false \
+    ro.telephony.call_ring.multiple=true \
     ro.use_data_netmgrd=true \
     persist.radio.multisim.config=dsds \
     persist.radio.custom_ecc=1 \
@@ -400,7 +416,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.ecc_hard_count=1 \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
     ril.subscription.types=NV,RUIM \
-    ro.telephony.default_network=9,1 \
+    ro.telephony.default_network=22,20 \
     persist.data.netmgrd.qos.enable=false
 
 # RIL
@@ -461,3 +477,5 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.usb.vid=2970
 
 $(call inherit-product, vendor/lenovo/a6000/a6000-vendor.mk)
+#$(call inherit-product, vendor/amitwh/common/amit_common.mk)
+

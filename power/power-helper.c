@@ -52,6 +52,7 @@
 #include "power-common.h"
 #include "power-helper.h"
 #include "power-feature.h"
+#include "power-helper.h"
 
 #define USINSEC 1000000L
 #define NSINUS 1000L
